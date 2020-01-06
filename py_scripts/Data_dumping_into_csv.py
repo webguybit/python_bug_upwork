@@ -41,8 +41,8 @@ def get_proxys():
     url1 = 'https://hidemy.name/api/proxylist.txt?out=plain&lang=ru'
     data = {'c': '169496407732367'}
     s = requests.session()
-    s.get(url1)
-    s.post(url, data=data)
+    s.get(url1, verify = False)
+    s.post(url, data=data, verify = False)
     res = s.get(url1)
     result = res.text.split('\r\n')
     return result

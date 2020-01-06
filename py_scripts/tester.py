@@ -17,25 +17,18 @@ headers = {
     'User-Agent': 'Mozilla/5.0 (X11; Ubuntu; Linux) Gecko/20100101 Firefox/60.0',
     'Token': 'bXpFNVc2bHR1d3IvK3lSb3F3UHVFVDJqNE8rN2VWN3ZiNEJ0Mnd3TXorbz18aHR0cHM6Ly9jYXJuaXZhbGNpbmVtYXMuc2cvIy9ib29rU2VhdHw2MzY2NjEzNDAwNzA2MzAwMDB8cno4THVPdEZCWHBoajlXUWZ2Rmg='
 }
-
 MAIN_URL = 'https://carnivalcinemas.sg/#'
-
 allmov_url = 'https://service.carnivalcinemas.sg/api/QuickSearch/GetAllMovieDetail?locationName=Mumbai'
-
-# ss = requests.session()
-# ss.headers = headers
-
-# print(ss)
-# res_am = json.loads(ss.get(allmov_url, verify = False).content)['responseMovies']
-
-# # print(res_am)
-# proxies = get_proxys()
-# print(proxies)
-# proxies = validate_proxies(proxies, MAIN_URL + '/')
-# ss = requests.session()
-# ss.headers = headers
-# ss.proxies = random.choice(proxies)
-# print(ss.proxies)
+sdates_url = 'https://service.carnivalcinemas.sg/api/QuickSearch/GetShowDatesByMovies?location=Mumbai&movieCode={0}'
+times_url = 'https://service.carnivalcinemas.sg/api/QuickSearch/GetCinemaAndShowTimeByMovie?location=Mumbai&movieCode={0}&date={1}'
+link = 'https://carnivalcinemas.sg/#/{0}/{1}'
+proxies = get_proxys()
+print(proxies)
+proxies = validate_proxies(proxies, MAIN_URL + '/')
+ss = requests.session()
+ss.headers = headers
+ss.proxies = random.choice(proxies)
+print(ss.proxies)
 
 # ss.timeout = 10
 
@@ -45,7 +38,13 @@ res_am = [{'code': 'CC00001401', 'name': 'NOW AND EVER', 'censor': 'PG13', 'lang
 
 for film in res_am:
     fname = film['name']
-    print(fname)
+    print('Trying {}'.format(fname))
+    try:
+        dates = json.loads(ss.get(sdates_url.format(fname), verify=False).content)['responseShowDates']
+        print('Dates are {}'.format(dates))
+    except Exception as e:
+        print(e)
+        continue
 
 
 
